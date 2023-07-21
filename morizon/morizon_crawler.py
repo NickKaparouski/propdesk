@@ -7,11 +7,15 @@ from selenium.webdriver.firefox.options import Options
 def get_max_pages_manually():
     while True:
         try:
-            max_pages = int(input("Enter the maximum number of pages to scrape (integer value): "))
-            if max_pages <= 0:
-                print("Please enter a positive integer greater than zero.")
-            else:
+            pages = int(input("Enter the maximum number of pages to scrape (integer value): "))
+            if pages < 0:
+                print("Please enter a positive integer greater than zero, or 0 to find maximum number of sites.")
+            elif pages == 0:
+                max_pages = get_max_pages()
+                print(f'The number of all pages is {max_pages}')
                 return max_pages
+            else:
+                return pages
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
 
@@ -51,7 +55,7 @@ def get_all_links(max_pages):
         for page_number in range(1, max_pages + 1):
             url = base_url.format(page_number)
             driver.get(url)
-            time.sleep(5)
+            time.sleep(3)
 
             # Execute JavaScript query to get all links on the page
             javascript_query = 'return Array.from(document.querySelectorAll(".offer a")).map((node) => node.href)'
@@ -81,9 +85,8 @@ def main():
         # Get all the links from the pages
         all_links = get_all_links(max_pages)
 
-        # Print all the links
-        for link in all_links:
-            print(link)
+        # Print how much links it has generate
+        print(f'This program has generated {len(all_links)} links')
 
         # Save all the links to a CSV file
         with open("morizon_all_links.csv", "w", newline="", encoding="utf-8") as csvfile:
