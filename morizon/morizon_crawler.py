@@ -55,18 +55,18 @@ def get_all_links(max_pages):
         for page_number in range(1, max_pages + 1):
             url = base_url.format(page_number)
             driver.get(url)
-            time.sleep(3)
+            time.sleep()
 
             # Execute JavaScript query to get all links on the page
-            javascript_query = 'return Array.from(document.querySelectorAll(".offer a")).map((node) => node.href)'
-            links = driver.execute_script(javascript_query)
+            JS_query = 'return Array.from(document.querySelectorAll(".offer a")).map((node) => node.href)'
+            links = driver.execute_script(JS_query)
             all_links.extend(links)
 
             # Print current page number
             print(f"Processing page {page_number}...")
 
-    except Exception as e:
-        print(f"Error while processing the page: {e}")
+    except Exception as exc:
+        print(f"Error while processing the page: {exc}")
 
     finally:
         driver.quit()
