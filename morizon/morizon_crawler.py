@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -7,11 +8,15 @@ from selenium.webdriver.firefox.options import Options
 def get_max_pages_manually():
     while True:
         try:
-            max_pages = int(input("Enter the maximum number of pages to scrape (integer value): "))
-            if max_pages <= 0:
-                print("Please enter a positive integer greater than zero.")
-            else:
+            pages = int(input("Enter the maximum number of pages to scrape (integer value): "))
+            if pages < 0:
+                print("Please enter a positive integer greater than zero, or 0 to find maximum number of sites.")
+            elif pages == 0:
+                max_pages = get_max_pages()
+                print(f'The number of all pages is {max_pages}')
                 return max_pages
+            else:
+                return pages
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
 
@@ -51,25 +56,25 @@ def get_all_links(max_pages):
         for page_number in range(1, max_pages + 1):
             url = base_url.format(page_number)
             driver.get(url)
-            time.sleep(5)
+            time.sleep(1)
 
             # Execute JavaScript query to get all links on the page
-            javascript_query = 'return Array.from(document.querySelectorAll(".offer a")).map((node) => node.href)'
-            links = driver.execute_script(javascript_query)
+            JS_query = 'return Array.from(document.querySelectorAll(".offer a")).map((node) => node.href)'
+            links = driver.execute_script(JS_query)
             all_links.extend(links)
 
             # Print current page number
             print(f"Processing page {page_number}...")
 
-    except Exception as e:
-        print(f"Error while processing the page: {e}")
+    except Exception as exc:
+        print(f"Error while processing the page: {exc}")
 
     finally:
         driver.quit()
 
     return all_links
 
-def main():
+def run_crawler():
     # Ask user for the maximum number of pages
     max_pages = get_max_pages_manually()
 
@@ -81,15 +86,17 @@ def main():
         # Get all the links from the pages
         all_links = get_all_links(max_pages)
 
-        # Print all the links
-        for link in all_links:
-            print(link)
-
+        #Generating filname with curent date and time
+        
+        filename = f'Morizon:{datetime.now().strftime("%d-%m-%Y_%H:%M")}'
+        # Print how much links it has generate
+        print(f'This program has generated {len(all_links)} links in file {filename}')
+        
         # Save all the links to a CSV file
-        with open("morizon_all_links.csv", "w", newline="", encoding="utf-8") as csvfile:
+        with open(f'{filename}.csv', "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["Links"])
             writer.writerows([[link] for link in all_links])
 
 if __name__ == "__main__":
-    main()
+    run_crawler()
