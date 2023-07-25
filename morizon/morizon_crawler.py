@@ -55,7 +55,7 @@ def get_all_links(max_pages):
         for page_number in range(1, max_pages + 1):
             url = base_url.format(page_number)
             driver.get(url)
-            time.sleep()
+            time.sleep(1)
 
             # Execute JavaScript query to get all links on the page
             JS_query = 'return Array.from(document.querySelectorAll(".offer a")).map((node) => node.href)'
@@ -73,7 +73,7 @@ def get_all_links(max_pages):
 
     return all_links
 
-def main():
+def run_crawler():
     # Ask user for the maximum number of pages
     max_pages = get_max_pages_manually()
 
@@ -95,4 +95,4 @@ def main():
             writer.writerows([[link] for link in all_links])
 
 if __name__ == "__main__":
-    main()
+    run_crawler()
