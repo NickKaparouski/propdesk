@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -85,11 +86,14 @@ def run_crawler():
         # Get all the links from the pages
         all_links = get_all_links(max_pages)
 
+        #Generating filname with curent date and time
+        
+        filename = f'Morizon:{datetime.now().strftime("%d-%m-%Y_%H:%M")}'
         # Print how much links it has generate
-        print(f'This program has generated {len(all_links)} links')
-
+        print(f'This program has generated {len(all_links)} links in file {filename}')
+        
         # Save all the links to a CSV file
-        with open("morizon_all_links.csv", "w", newline="", encoding="utf-8") as csvfile:
+        with open(f'{filename}.csv', "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["Links"])
             writer.writerows([[link] for link in all_links])
