@@ -88,7 +88,7 @@ def run_crawler():
 
         #Generating filname with curent date and time
         
-        filename = f'Morizon:{datetime.now().strftime("%d-%m-%Y_%H_%M")}'
+        filename = f'Morizon_{datetime.now().strftime("%d-%m-%Y_%H_%M")}'
         # Print how much links it has generate
         print(f'This program has generated {len(all_links)} links in file {filename}')
         
