@@ -13,8 +13,8 @@ Thumbs.db
 *.log
 *.csv
 
-# other files or folder #
+# other files or folders #
 ###############
 TODO.md
 propdesk-env*
-_pycache_*
+__pycache__/
