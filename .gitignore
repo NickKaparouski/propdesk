@@ -13,6 +13,7 @@ Thumbs.db
 *.log
 *.csv
 
-# other files #
+# other files or folder #
 ###############
 TODO.md
+propdesk-env*
