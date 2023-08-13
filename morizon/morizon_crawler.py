@@ -74,6 +74,10 @@ def get_all_links(max_pages):
 
     return all_links
 
+def create_filename(type_str):
+    filename = f'Morizon_{type_str}{datetime.now().strftime("%d-%m-%Y_%H_%M")}'
+    return filename
+
 def run_crawler():
     # Ask user for the maximum number of pages
     max_pages = get_max_pages_manually()
@@ -87,14 +91,13 @@ def run_crawler():
         all_links = get_all_links(max_pages)
 
         #Generating filname with curent date and time
-        
-        filename = f'Morizon_{datetime.now().strftime("%d-%m-%Y_%H_%M")}'
+        links_filename = create_filename('links')
         # Print how much links it has generate
         print(f'This program has generated {len(all_links)} links in file {filename}')
         
         # Save all the links to a CSV file
-        with open(f'{filename}.csv', "w", newline="", encoding="utf-8") as csvfile:
-            writer = csv.writer(csvfile)
+        with open(f'{links_filename}.csv', "w", newline="", encoding="utf-8") as csv_file:
+            writer = csv.writer(csv_file)
             writer.writerow(["Links"])
             writer.writerows([[link] for link in all_links])
 
