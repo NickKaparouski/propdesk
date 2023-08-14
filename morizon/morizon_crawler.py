@@ -1,6 +1,7 @@
 import time
-from datetime import datetime
 import csv
+import os
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
@@ -29,7 +30,7 @@ def get_max_pages():
 
     try:
         driver.get(url)
-        time.sleep()
+        time.sleep(1)
 
         # Find the maximum number of pages in pagination
         max_pages_element = driver.find_element(By.XPATH, '//*[@id="__layout"]/div/div[2]/div[3]/div/div/div[40]/div/div[2]/ul/li[5]/div/button/span')
@@ -76,7 +77,10 @@ def get_all_links(max_pages):
 
 def create_filename(type_str):
     filename = f'Morizon_{type_str}{datetime.now().strftime("%d-%m-%Y_%H_%M")}'
-    return filename
+    current_dir = os.getcwd()
+    file_path = f'data/{type_str}/{filename}'
+    full_path = os.path.join(current_dir, file_path)
+    return filename, full_path
 
 def run_crawler():
     # Ask user for the maximum number of pages
@@ -91,12 +95,13 @@ def run_crawler():
         all_links = get_all_links(max_pages)
 
         #Generating filname with curent date and time
-        links_filename = create_filename('links')
+        links_filename, full_path = create_filename('links')
+        print(full_path)
         # Print how much links it has generate
-        print(f'This program has generated {len(all_links)} links in file {filename}')
+        print(f'This program has generated {len(all_links)} links in file {links_filename}')
         
         # Save all the links to a CSV file
-        with open(f'{links_filename}.csv', "w", newline="", encoding="utf-8") as csv_file:
+        with open(f'{full_path}.csv', "w", newline="", encoding="utf-8") as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(["Links"])
             writer.writerows([[link] for link in all_links])
