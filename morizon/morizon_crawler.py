@@ -75,7 +75,7 @@ def get_all_links(max_pages):
 
     return all_links
 
-def create_filename(type_str):
+def create_file_param(type_str):
     filename = f'Morizon_{type_str}{datetime.now().strftime("%d-%m-%Y_%H_%M")}'
     current_dir = os.getcwd()
     file_path = f'data/{type_str}/{filename}'
@@ -95,7 +95,7 @@ def run_crawler():
         all_links = get_all_links(max_pages)
 
         #Generating filname with curent date and time
-        links_filename, full_path = create_filename('links')
+        links_filename, full_path = create_file_param('links')
         print(full_path)
         # Print how much links it has generate
         print(f'This program has generated {len(all_links)} links in file {links_filename}')
